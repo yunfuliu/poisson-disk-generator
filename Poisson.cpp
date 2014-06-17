@@ -382,7 +382,7 @@ int main( int argc, char** argv )
 		}
 		Img.ptr<uchar>(y)[x]	=	255;
 	}
-	cv::imwrite("Poisson_opencv.bmp",Img);
+	cv::imwrite("Poisson.bmp",Img);
 
 	return 0;
 }
