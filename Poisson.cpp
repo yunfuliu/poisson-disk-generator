@@ -27,6 +27,9 @@
 #include <time.h>
 #include <fstream>
 #include <memory.h>
+#include "C:\OpenCV\build\include\opencv2\core\core.hpp"
+#include "C:\OpenCV\build\include\opencv2\highgui\highgui.hpp"
+#include "C:\OpenCV\build\include\opencv2\imgproc\imgproc.hpp"
 
 ///////////////// User selectable parameters ///////////////////////////////
 
@@ -363,11 +366,8 @@ int main( int argc, char** argv )
 	std::vector<sPoint> Points = GeneratePoissonPoints( MinDistance, k, NumPoints );
 
 	// prepare BGR image
-	size_t DataSize = 3 * ImageSize * ImageSize;
-
-	unsigned char* Img = new unsigned char[ DataSize ];
-
-	memset( Img, 0, DataSize );
+	cv::Mat	Img(cv::Size(ImageSize,ImageSize),CV_8UC1);
+	Img.setTo(0);
 
 	for ( auto i = Points.begin(); i != Points.end(); i++ )
 	{
@@ -380,13 +380,9 @@ int main( int argc, char** argv )
 			float P = g_DensityMap[ x + y * ImageSize ];
 			if ( R > P ) continue;
 		}
-		int Base = 3 * (x + y * ImageSize);
-		Img[ Base+0 ] = Img[ Base+1 ] = Img[ Base+2 ] = 255;
+		Img.ptr<uchar>(y)[x]	=	255;
 	}
-
-	SaveBMP( "Poisson.bmp", Img, ImageSize, ImageSize );
-
-	delete[]( Img );
+	cv::imwrite("Poisson_opencv.bmp",Img);
 
 	return 0;
 }
